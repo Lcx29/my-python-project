@@ -4,7 +4,7 @@ from typing import List
 import bs4
 import requests
 
-from base.lcn_base_class import AssetNetworkResponse
+from financial_management.lcn_base_class import AssetNetworkResponse
 
 # 常量定义
 BASE_URL = "https://www.cmbchina.com/cfweb/personal/saproductdetail.aspx"

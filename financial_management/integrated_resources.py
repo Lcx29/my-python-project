@@ -6,12 +6,12 @@ import pandas as pd
 from datetime import datetime
 
 import base.lcn_time as lcn_time
-import function.fund.tian_tian_fund as tian_tian_fund
-import function.fund.zhao_shang_personal_finance as zhao_shang_personal_finance
-import function.fund.fang_tang_push as fang_tang_push
-from base.lcn_base_class import AssetOverview
+import financial_management.function.tian_tian_fund as tian_tian_fund
+import financial_management.function.zhao_shang_personal_finance as zhao_shang_personal_finance
+import fang_tang_push.fang_tang_push as fang_tang_push
+from financial_management.lcn_base_class import AssetOverview
 
-DEFAULT_FILE_PATH = "./my_python_config.json"
+DEFAULT_FILE_PATH = "my_python_config.json"
 
 
 def get_file_path_from_argv() -> str:
@@ -25,7 +25,7 @@ def get_file_path_from_argv() -> str:
 
     # 第一个参数为脚本的名称
     for index in range(1, len(sys.argv)):
-        if sys.argv[index] == "--file":
+        if sys.argv[index] == "--lcn_file":
             return sys.argv[index + 1]
     return DEFAULT_FILE_PATH
 
@@ -45,10 +45,10 @@ def load_json_config_from_file(file_path: str) -> Dict[str, Any]:
         with open(file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except FileNotFoundError:
-        print("Configuration file not found.")
+        print("Configuration lcn_file not found.")
         return {}
     except json.JSONDecodeError:
-        print("Invalid JSON format in configuration file.")
+        print("Invalid JSON format in configuration lcn_file.")
         return {}
 
 
@@ -247,7 +247,7 @@ def format_money(money):
     return round(money, 2)
 
 
-if __name__ == '__main__':
+def start():
     # 获取文件路径
     config_file_path = get_file_path_from_argv()
 
@@ -268,3 +268,7 @@ if __name__ == '__main__':
     send_title = f"{lcn_time.today()} 收益通知\n\n"
     fang_tang_push.sc_send(fang_tang_config["send_key"], send_title, send_desc)
     print("推送成功")
+
+
+if __name__ == '__main__':
+    start()
