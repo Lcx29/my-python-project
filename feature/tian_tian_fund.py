@@ -3,7 +3,7 @@ from typing import Optional, List
 import requests
 from bs4 import BeautifulSoup
 
-from financial_management.lcn_base_class import AssetNetworkResponse
+from base.clazz.asset_network_response import AssetNetworkResponse
 
 
 def request_fund_data_from_api(
@@ -73,7 +73,7 @@ def parse_fund_data_from_html_response(html_response: Optional[requests.Response
 
     soup = BeautifulSoup(html_response.text, 'html.parser')
     table_rows = soup.find_all("tr")
-    responses: List[AssetNetworkResponse] = []
+    responses = []
 
     for row in table_rows[1:]:
         try:

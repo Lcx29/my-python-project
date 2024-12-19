@@ -1,33 +1,72 @@
 import json
-import sys
 from typing import Dict, Any
 
 import pandas as pd
 from datetime import datetime
 
-import base.lcn_time as lcn_time
-import financial_management.function.tian_tian_fund as tian_tian_fund
-import financial_management.function.zhao_shang_personal_finance as zhao_shang_personal_finance
-import fang_tang_push.fang_tang_push as fang_tang_push
-from financial_management.lcn_base_class import AssetOverview
+from base import lcn_time
 
-DEFAULT_FILE_PATH = "my_python_config.json"
+from feature import zhao_shang_personal_finance, tian_tian_fund, fang_tang_push
 
 
-def get_file_path_from_argv() -> str:
-    """获取文件路径
+class AssetOverview:
+    def __init__(self, code, name, initial_amount, available_shares, current_amount, preview_day_diff_amount,
+                 date_detail_list):
+        # 代码
+        self._code = code
+        # 名称
+        self._name = name
+        # 初始金额
+        self._initial_amount = initial_amount
+        # 可用份额
+        self._available_shares = available_shares
+        # 当前的金额
+        self._current_amount = current_amount
+        # 最新的一天和前一天的差额
+        self._preview_day_diff_amount = preview_day_diff_amount
+        # 每天的详情列表
+        self._date_detail_list = date_detail_list
 
-    从命令行参数中获取文件路径，如果没有则返回默认路径
+    @property
+    def code(self):
+        return self._code
 
-    Returns
-        文件路径
-    """
+    @property
+    def name(self):
+        return self._name
 
-    # 第一个参数为脚本的名称
-    for index in range(1, len(sys.argv)):
-        if sys.argv[index] == "--lcn_file":
-            return sys.argv[index + 1]
-    return DEFAULT_FILE_PATH
+    @property
+    def initial_amount(self):
+        return self._initial_amount
+
+    @property
+    def available_shares(self):
+        return self._available_shares
+
+    @property
+    def current_amount(self):
+        return self._current_amount
+
+    # current_amount 需要提供设置方法, 因为需要后面赋值
+    @current_amount.setter
+    def current_amount(self, current_amount):
+        self._current_amount = current_amount
+
+    @property
+    def preview_day_diff_amount(self):
+        return self._preview_day_diff_amount
+
+    @preview_day_diff_amount.setter
+    def preview_day_diff_amount(self, preview_day_diff_amount):
+        self._preview_day_diff_amount = preview_day_diff_amount
+
+    @property
+    def date_detail_list(self):
+        return self._date_detail_list
+
+    # 盈亏情况
+    def profit_loss_situation(self):
+        return round(self._current_amount - self.initial_amount, 2)
 
 
 def load_json_config_from_file(file_path: str) -> Dict[str, Any]:
@@ -247,10 +286,7 @@ def format_money(money):
     return round(money, 2)
 
 
-def start():
-    # 获取文件路径
-    config_file_path = get_file_path_from_argv()
-
+def start_handle(config_file_path: str):
     # 获取配置
     json_config_data = load_json_config_from_file(config_file_path)
 
@@ -268,7 +304,3 @@ def start():
     send_title = f"{lcn_time.today()} 收益通知\n\n"
     fang_tang_push.sc_send(fang_tang_config["send_key"], send_title, send_desc)
     print("推送成功")
-
-
-if __name__ == '__main__':
-    start()
