@@ -7,11 +7,13 @@ python >= 3.0.0
 ## command
 
 ```sh
-# download, add scp -r to download file fold
-scp /local/path/to/file user@host:/remote/path/to/file
 # upload
+scp /local/path/to/file user@host:/remote/path/to/file
+
+# download, add scp -r to download file fold
 scp user@host:/remote/path/to/file /local/path/to/file 
 
+# chmod
 chmod +x /path/to/file
 
 crontab -e

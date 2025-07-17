@@ -6,7 +6,7 @@ from datetime import datetime
 
 from base import lcn_time
 
-from feature import zhao_shang_personal_finance, tian_tian_fund, fang_tang_push
+from feature.invert import fang_tang_push, zhao_shang_personal_finance, tian_tian_fund
 
 
 class AssetOverview:
